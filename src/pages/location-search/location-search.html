@@ -1,0 +1,35 @@
+<ion-header>
+    
+    <ion-navbar>
+        <ion-title>Location Search Page</ion-title>
+    </ion-navbar>
+    
+</ion-header>
+
+<ion-content>
+    <form #searchForm="ngForm" (ngSubmit)="onSearchLocationSubmit(searchForm)">
+        <div class="form_body">
+            <ion-item>
+                <ion-label>Search Term (Restaurants, Chipotle, etc.)</ion-label>
+                <ion-input type="text" [(ngModel)]="search.term" class="form-control" name="search_type" required></ion-input>
+            </ion-item>
+            <ion-item class="form-group">
+                <ion-label>Search Location (City, State, Zipcode, etc.)</ion-label>
+                <ion-input type="text" [(ngModel)]="search.location" class="form-control" name="location" required></ion-input>
+            </ion-item>
+        </div>
+        <div class="form_footer">
+            <button ion-button type="submit" class="btn" block>Submit</button>
+        </div>
+    </form>
+    <div class="result" *ngFor="let result of results">
+        <h2>{{result.name}}</h2>
+        <div class="address">
+            {{result.location.address1}} {{result.location.address2}}<br />{{result.location.city}}, {{result.location.state}} {{result.location.zip_code}}
+        </div>
+        <div>{{result.display_phone}}</div>
+        <div class="image-wrap">
+            <img src="{{result.image_url}}" alt="{{result.name}} Image" />
+        </div>
+    </div>
+</ion-content>

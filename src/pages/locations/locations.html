@@ -1,0 +1,22 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Location Search</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <div class="location_card" *ngIf="results">
+        <h2>{{activeLocation.name}}</h2>
+        <div class="address">
+            <address>{{activeLocation.location.address1}} {{activeLocation.location.address2}}<br />{{activeLocation.location.city}}, {{activeLocation.location.state}} {{activeLocation.location.zip_code}}</address>
+        </div>
+        <div class="phone_number">{{activeLocation.display_phone}}</div>
+        <div class="image-wrap">
+            <img src="{{activeLocation.image_url}}" alt="{{activeLocation.name}} Image" />
+        </div>
+        <div class="choices">
+            <button ion-button color="light" class="choices_no btn btn-secondary" (click)="chooseNo()">No</button>
+            <button ion-button color="dark" class="choices_yes btn btn btn-primary" (click)="chooseYes()">Yes</button>
+        </div>
+    </div>
+</ion-content>

@@ -1,0 +1,18 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Chosen Location</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <div class="chosen_location" padding>
+        <div class="modal-header">
+            <h4 class="modal-title">{{ chosenLocation.name }}</h4>
+        </div>
+        <div class="modal-body">
+            <p></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ion-button color="dark" class="btn btn-outline-dark" (click)="closeModal(chosenLocation)">Close</button>
+        </div>
+    </div>
+</ion-content>
