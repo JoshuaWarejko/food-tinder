@@ -32,14 +32,15 @@ app.use('*', function(req, res, next) {
 
 // MongoDB setup / connection
 const MongoOptions = require('./config/mongo').connection;
-// mongoose.connect(MongoOptions.uri, MongoOptions.db, MongoOptions.port, MongoOptions.credentials)
-//   .then(() =>  console.log('connection successful'))
-//   .catch((err) => console.error(err));
-
-MongoClient.connect(`mongodb://${MongoOptions.credentials.user}:${MongoOptions.credentials.pass}@${MongoOptions.uri}:${MongoOptions.port}/${MongoOptions.db}?authSource=admin`, function(err, db) {
-  if(err) return console.log(err);
-  console.log("Successfully connected to db: ", db.s.databaseName);
-});
+const MongoConnectionUri = `mongodb://${MongoOptions.credentials.user}:${MongoOptions.credentials.pass}@${MongoOptions.uri}:${MongoOptions.port}/${MongoOptions.db}?authSource=admin`;
+const promiseLib = global.Promise; //mongoose' Promise library is deprecated, so we need to provide our own.
+mongoose.Promise = promiseLib;
+mongoose.connect(MongoConnectionUri, {
+  useMongoClient: true,
+  promiseLibrary: promiseLib // Deprecation issue again
+})
+.then((res) =>  console.log('MongoDB connected successfully to db:', res.db.s.databaseName))
+.catch((err) => console.error(err));
 
 // Parsers
 // uncomment after placing your favicon in /public
