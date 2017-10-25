@@ -21,10 +21,10 @@ export class LocationSearchPage {
     ) {
         this.search = {term: "", location: ""};
         this.submitted = false;
-        this.loading = this.loadingCtrl.create({content: "Searching for locations..."});
     }
     
     onSearchLocationSubmit() {
+        this.loading = this.loadingCtrl.create({content: "Searching for locations..."});
         this.loading.present();
         this.submitted = true;
         this.results = null;
