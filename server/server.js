@@ -6,10 +6,12 @@ const express = require('express'),
       cookieParser = require('cookie-parser'),
       bodyParser = require('body-parser'),
       mongoose = require('mongoose'),
-      MongoClient = require('mongodb').MongoClient
+      MongoClient = require('mongodb').MongoClient,
+      dotenv = require('dotenv').config({ path: '.env' });
 
+      
 // Express App
-const app = express();
+app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,6 +44,8 @@ mongoose.connect(MongoConnectionUri, {
 .then((res) =>  console.log('MongoDB connected successfully to db:', res.db.s.databaseName))
 .catch((err) => console.error(err));
 
+app.set('superSecret', process.env.TOKEN_SECRET);
+
 // Parsers
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -54,11 +58,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // API files for interacting with MongoDB
 const index = require('./routes/index');
 const usersApi = require('./routes/users');
+const yesListApi = require('./routes/yes-lists');
 const yelpApi = require('./routes/yelp');
 
 // API location
 app.use('/', index);
 app.use('/api/users', usersApi);
+app.use('/api/yes-lists', yesListApi);
 app.use('/api/yelp', yelpApi);
 
 // catch 404 and forward to error handler
@@ -76,7 +82,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send(err);
 });
 
 module.exports = app;

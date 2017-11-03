@@ -3,23 +3,29 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "NODE_ENV=development nodemon ./bin/www"
   },
   "private": true,
   "dependencies": {
+    "@adf/utilities": "^1.0.21",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.2.0",
     "core-js": "^2.4.1",
+    "debug": "~2.2.0",
+    "dotenv": "^4.0.0",
     "express": "^4.15.5",
     "hbs": "~4.0.1",
+    "jsonwebtoken": "^8.1.0",
     "mongodb": "^2.2.31",
     "mongoose": "^4.11.13",
+    "mongoose-beautiful-unique-validation": "^7.0.0",
     "morgan": "~1.7.0",
+    "request": "^2.83.0",
     "rxjs": "^5.4.2",
+    "serve-favicon": "~2.3.0",
     "yelp-fusion": "^1.0.3",
-    "zone.js": "^0.8.14",
-    "serve-favicon": "~2.3.0"
+    "zone.js": "^0.8.14"
   },
   "devDependencies": {
     "@types/jasmine": "~2.5.53",

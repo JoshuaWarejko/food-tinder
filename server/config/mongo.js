@@ -4,10 +4,10 @@ function Mongo() {
 		port: '27017',
 		db: 'foodlocator',
 		credentials: {
-			user: "joshuawarejko",
-			pass: "thebled13",
+			user: process.env.MONGO_USERNAME,
+			pass: process.env.MONGO_PASSWORD,
 			auth: {
-				authdb: 'admin'
+				authdb: process.env.MONGO_AUTHDB
 			}
 		}
 	}

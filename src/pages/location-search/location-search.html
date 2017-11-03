@@ -22,7 +22,7 @@
             <button ion-button type="submit" block>Submit</button>
         </div>
     </form>
-    <div class="result" *ngFor="let result of results">
+    <div class="result" *ngFor="let result of results" padding>
         <h2>{{result.name}}</h2>
         <div class="address">
             {{result.location.address1}} {{result.location.address2}}<br />{{result.location.city}}, {{result.location.state}} {{result.location.zip_code}}

@@ -92,4 +92,5 @@
         <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="Show your location on the map" />
         <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Trace your location on the map" />
     </plugin>
+    <plugin name="cordova-sqlite-storage" spec="^2.0.4" />
 </widget>
