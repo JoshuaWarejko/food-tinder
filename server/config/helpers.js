@@ -1,10 +1,21 @@
-var path = require('path');
+// Basic error handling function.
+function basicError(message, status) {
+  var error = new Error();
+  error.status = status;
+  error.message = message;
+  return error;
+};
 
-var _root = path.resolve(__dirname, '..');
-
-function root(args) {
-  args = Array.prototype.slice.call(arguments, 0);
-  return path.join.apply(path, [_root].concat(args));
+function callback(error, retval) {
+  if(error) {
+      return error;
+  }
+  return retval;
 }
 
-exports.root = root;
+const helpers = {
+  basicError: basicError,
+  callback: callback
+}
+
+module.exports = helpers;

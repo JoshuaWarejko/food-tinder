@@ -16,14 +16,17 @@ let CollectionSchema = new mongoose.Schema({
     lastUpdated: { type: Date, required: true }
 });
 
-CollectionSchema.pre('validate', function(next) {
-    let collection = this;
-    return next();
+CollectionSchema.pre('validate', function(callback) {
+	let collection = this;
+	
+	collection.lastUpdated = new Date();
+	return callback();
+
 });
 
-CollectionSchema.pre('save', function(next) {
+CollectionSchema.pre('save', function(callback) {
     let collection = this;
-    return next();
+    return callback();
 });
 
 const Collection = mongoose.model('Collection', CollectionSchema);
