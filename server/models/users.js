@@ -17,13 +17,13 @@ UserSchema.plugin(beautifyUnique);
 
 // authenticate input against database documents
 UserSchema.statics.authenticate = function(email, password, callback) {
-	return User.findOne({ email: email }, '+password').exec(function (error, user) {
+	return this.findOne({ email: email }, '+password').exec(function (error, user) {
 		if(error) {
 			return callback(error);
 		} else if (!user) {
 			return callback(utilities.createError('User not found'), 401);
     }
-		bcrypt.compare(password, user.password, function(error, result) {
+		return bcrypt.compare(password, user.password, function(error, result) {
 			if(result === true) {
 				return callback(null, user);
 			} else {
@@ -74,5 +74,4 @@ UserSchema.pre('save', function(callback) {
   })
 });
 
-const User = mongoose.model('User', UserSchema);
-module.exports = User;
+module.exports = mongoose.model('User', UserSchema);

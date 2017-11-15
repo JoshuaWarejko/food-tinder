@@ -58,13 +58,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 // API files for interacting with MongoDB
 const index = require('./routes/index');
 const usersApi = require('./routes/users');
+const collectionApi = require('./routes/collections');
 const yesListApi = require('./routes/yes-lists');
+const locationApi = require('./routes/locations');
 const yelpApi = require('./routes/yelp');
 
 // API location
 app.use('/', index);
 app.use('/api/users', usersApi);
+app.use('/api/collections', collectionApi);
 app.use('/api/yes-lists', yesListApi);
+app.use('/api/locations', locationApi);
 app.use('/api/yelp', yelpApi);
 
 // catch 404 and forward to error handler

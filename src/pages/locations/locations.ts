@@ -76,10 +76,9 @@ export class LocationsPage {
         this.locationsApi.getLocations({latitude: lat, longitude: long}).subscribe(res => {
             this.activeLocation = {};
             this.activeIndex = 0;
-            this.results = res['businesses'];
+            this.results = res['data']['businesses'];
             this.activeLocation = this.results[this.activeIndex];
             this.loading.dismiss();
-            console.log(this.results);
         }, err => {
             console.log(err);
         });

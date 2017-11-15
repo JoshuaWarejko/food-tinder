@@ -29,5 +29,4 @@ CollectionSchema.pre('save', function(callback) {
     return callback();
 });
 
-const Collection = mongoose.model('Collection', CollectionSchema);
-module.exports = Collection;
+module.exports = mongoose.model('Collection', CollectionSchema);

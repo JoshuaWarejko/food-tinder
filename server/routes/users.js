@@ -6,18 +6,23 @@ const utilities = require('@adf/utilities');
 const jwt = require('jsonwebtoken');
 const tokenHandler = require('../config/token-handler');
 const helpers = require('../config/helpers');
+const async = require('async');
 
 const TokenHandler = new tokenHandler();
 
-// Response handling
-let response = {
-    status: 200,
-    data: [],
-    message: null
-};
+if(process.env.NODE_ENV == "development") {
+    // Get users
+    router.get('/', function(req, res, next) {
+        User.find({}).then((users) => {
+            res.json(helpers.response(users, "Successfully retrieved users", 200));
+        }).catch((err) => {
+            return next(err);
+        });
+    });
+}
 
 // POST / - route to create new users.
-router.post('/', (req, res, next) => {
+router.post('/', function(req, res, next) {
     
     if(!req.body.name) {
         return next(helpers.basicError("Name is required to create an account", 400)); 
@@ -44,27 +49,25 @@ router.post('/', (req, res, next) => {
             }
             return next(error);
         } else {
-            return res.json({
-                success: true,
-                status: 200,
-                data: {
-                    id: user._id,
-                    dateJoined: user.dateJoined,
-                    name: user.name,
-                    email: user.email,
-                    lastUpdated: user.lastUpdated
-                }
-            });
+            const data = {
+                id: user._id,
+                dateJoined: user.dateJoined,
+                name: user.name,
+                email: user.email,
+                lastUpdated: user.lastUpdated
+            }
+            return res.status(201).json(helpers.response(data, "Sucessfully created new user", 201));
         }
     });
 });
 
 // POST /authenticate - route to authenticate a user.
-router.post('/authenticate', (req, res, next) => {
+router.post('/authenticate', function(req, res, next) {
     
     if(!req.body.email || !req.body.password) {
         return next(helpers.basicError("Both email and password are required to login", 400));
     }
+
     
     User.authenticate(req.body.email, req.body.password, function(error, user) {
         if(error || !user) {
@@ -88,88 +91,106 @@ router.post('/authenticate', (req, res, next) => {
     });
 });
 
-if(process.env.NODE_ENV == "development") {
-    // Get users
-    router.get('/', (req, res, next) => {
-        User.find({}).then((users) => {
-            response.data = users;
-            res.json(response);
-        }).catch((err) => {
-            return next(err);
-        });
-    });
-}
-
-// GET /:id - get user based on ID
-router.get('/:id', TokenHandler.verifyUser, (req, res, next) => {
-    if(!req.params.id) {
+// GET /:userId - get user based on ID
+router.get('/:userId', TokenHandler.verifyUser, function(req, res, next) {
+    if(!req.params.userId) {
         return next(helpers.basicError("No user ID present in request url", 401));
     }
     return User.findOne({
-        _id: req.params.id
+        _id: req.params.userId
     }).then((user) => {
-        response.data = user;
-        response.message = "Success";
-        return res.json(response);
+        return res.status(200).json(helpers.response(user, "Success", 200));
     }).catch((err) => {
         return next(err);
     });
 });
 
-// PUT /:id/update - update specific user.
-router.put('/:id/update', TokenHandler.verifyUser, (req, res, next) => {
-    if(!req.params.id) {
+// PUT /:userId/update - update specific user.
+router.put('/:userId/update', TokenHandler.verifyUser, function(req, res, next) {
+    if(!req.params.userId) {
         return next(helpers.basicError("No user ID present in request url", 401));
     }
-    return User.findOne({
-        _id: req.params.id
-    }).then((user) => {
-        if(req.body.name) {
-            user.set({ name: req.body.name });
+    return async.waterfall([
+        function(callback) {
+            return User.findOne({
+                _id: req.params.userId
+            }).then((user) => {
+                if(req.body.name) {
+                    user.set({ name: req.body.name });
+                }
+                if(req.body.email) {
+                    user.set({ email: req.body.email });
+                }
+                return callback(null, user);
+            }).catch((err) => {
+                return callback(err);
+            });
+        }, function(user, callback) {
+            return user.save(function(err, updatedUser) {
+                if(err) return next(err);
+                return callback(null, helpers.response(updatedUser, "Successfully updated user", 200));
+            });
         }
-        if(req.body.email) {
-            user.set({ email: req.body.email });
-        }
-        
-        return user.save(function(err, updatedUser) {
-            if(err) return next(err);
-            response.data = updatedUser;
-            response.message = "Successfully updated user";
-            return res.json(response);
-        });
-        
-    }).catch((err) => {
-        return next(err);
-    });
+    ], (error, response) => {
+        if(error) return next(error);
+        return res.status(200).json(response);
+    }); 
 });
 
-// POST /:id/collections(Collection, token): Collection
-router.post('/:id/collections', TokenHandler.verifyUser, (req, res, next) => {
-    if(!req.params.id) {
+// POST /:userId/collections(Collection, token): Collection - Create collection for specified user.
+router.post('/:userId/collections', TokenHandler.verifyUser, function(req, res, next) {
+    
+    if(!req.params.userId) {
         return next(helpers.basicError("No user ID present in request url", 401));
     }
-
+    
     if(!req.body.collection) {
         return next(helpers.basicError("Collection data required to create collection for user", 401));
     }
-
-    return User.findOne({
-        _id: req.params.id
-    }).then((user) => {
-        let newCollection = new Collection({
-            name: req.body.collection.name,
-            user: user.id
-        });
-        return Collection.create(newCollection, (err, collection) => {
-            if(err) return next(err);
-            response.data = collection;
-            response.message = "Successfully created user collection";
-            return res.json(response);
-        });
-        
-    }).catch((err) => {
-        return next(err);
+    
+    return async.waterfall([
+        function(callback) {
+            return User.findOne({
+                _id: req.params.userId
+            }).then((user) => {
+                let newCollection = new Collection({
+                    name: req.body.collection.name,
+                    user: user.id
+                });
+                return callback(null, newCollection);
+            }).catch((err) => {
+                return callback(err);
+            });
+        }, function(newCollection, callback) {
+            return Collection.create(newCollection, (err, collection) => {
+                if(err) return callback(err);
+                return callback(null, helpers.response(collection, "Successfully created user collection", 201));
+            });
+        }
+    ], (error, response) => {
+        if(error) {
+            return next(error);
+        }
+        return res.json(response);
     });
 });
+
+// DELETE /:userId ****** need to add this *****
+
+// // GET /:userId/collections - Get all user collections.
+// router.get('/:userId/collections', TokenHandler.verifyUser, function(req, res, next) {
+    
+// });
+
+// // GET /:userId/collections/:collectionId - Get specific collection from specified user.
+// router.get('/:userId/collections/:collectionId', TokenHandler.verifyUser, function(req, res, next) {
+    
+// });
+
+// // POST /:userId/collections/:collectionId/add - Add YesList to specific collection for user.
+// router.post('/:userId/collections/:collectionId/add', TokenHandler.verifyUser, function(req, res, next) {
+    
+// });
+
 
 module.exports = router;

@@ -1,0 +1,86 @@
+{
+    "location": {
+        "id": "seoulmate-long-beach",
+        "name": "Seoulmate",
+        "image_url": "https://s3-media2.fl.yelpcdn.com/bphoto/lB1AG_dUZ-tjKkdGgTxHyA/o.jpg",
+        "is_closed": false,
+        "url":"https://www.yelp.com/biz/seoulmate-long-beach?adjust_creative=BP5bDiqYdkDgtHDczeF8Mw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=BP5bDiqYdkDgtHDczeF8Mw",
+        "review_count":890,
+        "categories":[
+            {
+                "alias":"korean",
+                "title":"Korean"
+                
+            },
+            {
+                "alias":"asianfusion",
+                "title":"Asian Fusion"
+                
+            }
+        ],
+        "rating":4.5,
+        "coordinates":{
+            "latitude":33.7751585,
+            "longitude":-118.1379874
+        },
+        "transactions":["delivery","pickup","restaurant_reservation"],
+        "price": "$",
+        "location": {
+            "address1":"4712 E 7th St",
+            "address2":"",
+            "address3":"",
+            "city":"Long Beach",
+            "zip_code":"90804",
+            "country":"US",
+            "state":"CA",
+            "display_address":["4712 E 7th St","Long Beach, CA 90804"]
+        },
+        "phone":"+15624331158",
+        "display_phone":"(562) 433-1158",
+        "distance":2658.1128913141442
+    }, "yesList": {
+        "identifier": "Long Beach",
+        "name": "Long Beach Locations",
+        "user": "59fb74d00839882ecaf6b01b",
+        "locations": [{
+            "id": "seoulmate-long-beach",
+            "name": "Seoulmate",
+            "image_url": "https://s3-media2.fl.yelpcdn.com/bphoto/lB1AG_dUZ-tjKkdGgTxHyA/o.jpg",
+            "is_closed": false,
+            "url":"https://www.yelp.com/biz/seoulmate-long-beach?adjust_creative=BP5bDiqYdkDgtHDczeF8Mw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=BP5bDiqYdkDgtHDczeF8Mw",
+            "review_count":890,
+            "categories":[
+                {
+                    "alias":"korean",
+                    "title":"Korean"
+                    
+                },
+                {
+                    "alias":"asianfusion",
+                    "title":"Asian Fusion"
+                    
+                }
+            ],
+            "rating":4.5,
+            "coordinates":{
+                "latitude":33.7751585,
+                "longitude":-118.1379874
+            },
+            "transactions":["delivery","pickup","restaurant_reservation"],
+            "price": "$",
+            "location": {
+                "address1":"4712 E 7th St",
+                "address2":"",
+                "address3":"",
+                "city":"Long Beach",
+                "zip_code":"90804",
+                "country":"US",
+                "state":"CA",
+                "display_address":["4712 E 7th St","Long Beach, CA 90804"]
+            },
+            "phone":"+15624331158",
+            "display_phone":"(562) 433-1158",
+            "distance":2658.1128913141442
+        }]
+    }
+}
